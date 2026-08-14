@@ -1,0 +1,62 @@
+# 用 GitHub Actions 部署 Pages，不走 legacy Jekyll 构建器。
+#
+# 换过来的原因：legacy 构建器连着失败，且 duration 为 0——文件根本没被处理就报
+# "Page build failed"。同一个 commit（d599627）8月5日构建成功、8月6日却失败，
+# 说明不是仓库内容的问题，是那条构建路径本身不稳，GitHub 也在逐步淘汰它。
+#
+# 这个项目是纯静态站：index.html + app.js + style.css + assets/，没有任何
+# Jekyll 内容（{{ 和 {% 全文 0 处）。直接把仓库原样发出去即可。
+name: Deploy Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:        # 允许在网页上手动重跑，构建再抽风时不用靠推空提交
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 只保留最新一次部署：连着推几次时，中间那些没必要跑完。
+# 但不取消进行中的那次，避免把一次已经跑到一半的部署打断留下半截状态。
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # 部署前先跑一遍测试。线上挂掉的版本不该是因为我们自己推了个坏的。
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: 结构测试
+        run: node --check app.js && node tests/structure.test.mjs
+
+      # 单文件分发版必须和源码同步，否则下载到的那份会比线上旧。
+      - name: 校验单文件版是最新的
+        run: |
+          python3 build_single.py
+          if ! git diff --quiet -- 模拟英雄联盟选手-单文件版.html; then
+            echo "::error::模拟英雄联盟选手-单文件版.html 与源码不同步，请在本地跑 python3 build_single.py 后重新提交"
+            git diff --stat -- 模拟英雄联盟选手-单文件版.html
+            exit 1
+          fi
+
+      # enablement: true 让首次部署自己把 Pages 打开，
+      # 省掉「先去 Settings 里手动选 Source」那一步。
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,14 @@
+.DS_Store
+.claude/
+.playwright-cli/
+.superpowers/
+output/
+
+# 改造过程中归档的原作（足球版）设定文档与临时文件，不进仓库
+.archive/
+
+# 立绘只保留 webp；png 源图体积大且不被引用
+assets/*.png
+
+# 推送步骤是一次性说明，不进仓库
+推送步骤.md

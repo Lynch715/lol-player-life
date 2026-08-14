@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#091428">
+  <meta name="description" content="从14岁网吧少年到S赛舞台的英雄联盟职业选手生涯模拟游戏。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23c8aa6e%22/><text x=%2232%22 y=%2243%22 text-anchor=%22middle%22 font-size=%2230%22>🎮</text></svg>">
+  <title>模拟英雄联盟选手 · 峡谷人生</title>
+  <link rel="stylesheet" href="style.css">
+  <style>html{touch-action:manipulation;-webkit-text-size-adjust:100%}body{overscroll-behavior:none}
+  .menu-screen .story-art img{object-position:center top}.menu-screen .story-art{height:58vh}.menu-screen .story-copy h2{font-size:24px;margin:0 0 10px}.menu-screen .story-body{min-height:0}
+  .month-summary{margin-top:4px}.month-summary .ms-row{display:flex;justify-content:space-between;align-items:center;padding:10px 2px;border-bottom:1px solid #ffffff12;font-size:14px}.month-summary .ms-row:last-child{border-bottom:0}.month-summary .ms-row b{font-size:15px}.ms-note{margin:0 0 6px;color:var(--muted);font-size:13px}</style>
+</head>
+<body>
+  <div class="pitch-noise" aria-hidden="true"></div>
+
+  <section id="menu" class="story-screen menu-screen">
+    <div class="story-art"><img src="assets/player.webp" alt="选手立绘"></div>
+    <div class="story-copy glass">
+      <span class="eyebrow">PLAYER / 001</span>
+      <h2>模拟英雄联盟选手</h2>
+      <div class="story-body"><p>从14岁的网吧少年开始，走出你自己的一段峡谷人生。</p></div>
+      <button id="menuContinue" class="primary-cta hidden" type="button">继续游戏 <span>→</span></button>
+      <button id="menuNew" class="ghost-btn" type="button" style="width:100%;margin-top:12px;min-height:48px">新游戏</button>
+    </div>
+  </section>
+
+  <section id="creator" class="screen creator-screen hidden">
+    <div class="creator-visual">
+      <img src="assets/player.webp" alt="年轻选手立绘">
+      <div class="visual-copy">
+        <span class="eyebrow">PLAYER / 001</span>
+        <h1>模拟选手</h1>
+        <p>有些人的人生，从网吧里那台掉漆的机器开始。</p>
+      </div>
+    </div>
+    <div class="creator-panel glass">
+      <div class="creator-head">
+        <div>
+          <span class="eyebrow">建立你的档案</span>
+          <h2 id="creatorHeadline">14岁 · 中单 · CQG 青训队</h2>
+        </div>
+        <span id="positionChip" class="position-chip">MID</span>
+      </div>
+
+      <label class="field-label" for="playerName">选手 ID</label>
+      <input id="playerName" class="name-input" maxlength="8" value="Zephyr" autocomplete="off">
+
+      <div class="talent-head">
+        <div>
+          <span class="field-label">分路</span>
+          <p>五个位置，选完不能改。它决定同样一套属性在你身上值多少钱。</p>
+        </div>
+      </div>
+      <div id="positionPicker" class="position-picker"></div>
+
+      <div class="talent-head">
+        <div>
+          <span class="field-label">出身</span>
+          <p>你是怎么开始打这个游戏的，不占分配点。野生的手快但作息烂，体系出来的稳但少点野性。</p>
+        </div>
+      </div>
+      <div id="originPicker" class="origin-picker"></div>
+
+      <div class="allocation-head">
+        <div>
+          <span class="field-label">初始属性</span>
+          <p>把24点分给七项能力。你不可能样样精通。</p>
+        </div>
+        <div class="points-orb"><b id="pointsLeft">24</b><span>剩余</span></div>
+      </div>
+      <div id="attributeAllocator" class="attribute-allocator"></div>
+
+      <div class="talent-head">
+        <div>
+          <span class="field-label">随机天赋 · 3/20</span>
+          <p>天赋会改变行动收益、关键事件和比赛发动概率。</p>
+        </div>
+        <button id="rerollTalents" class="ghost-btn" type="button">重抽一次</button>
+      </div>
+      <div id="talentDraft" class="talent-draft"></div>
+
+      <div class="talent-head">
+        <div>
+          <span class="field-label">难度</span>
+          <p>难度越高，成长越慢、伤病越多、门槛越高、账面越紧。</p>
+        </div>
+      </div>
+      <div id="difficultyPicker" class="difficulty-picker"></div>
+
+      <button id="startGame" class="primary-cta" type="button" disabled>坐到位置上 <span>→</span></button>
+      <p class="legal-note">虚构模拟作品，与拳头公司及任何战队无关。真实战队与赛事名称仅用于赛程氛围，不含队标、选手肖像与商业标识。</p>
+    </div>
+  </section>
+
+  <section id="prologue" class="story-screen hidden" aria-live="polite">
+    <div class="story-art"><img id="prologuePortrait" src="assets/father.webp" alt="剧情人物"></div>
+    <div class="story-copy glass">
+      <span id="prologueKicker" class="eyebrow">序章</span>
+      <h2 id="prologueTitle">那台掉漆的旧机器</h2>
+      <div id="prologueBody" class="story-body"></div>
+      <div class="story-progress"><i id="prologueProgress"></i></div>
+      <button id="nextPrologue" class="primary-cta" type="button">继续 <span>→</span></button>
+    </div>
+  </section>
+
+  <div id="game" class="game-shell hidden">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="brand-mark">召</div>
+        <div>
+          <h1>模拟选手</h1>
+          <p id="careerSubtitle">第1赛季 · 青训期</p>
+        </div>
+      </div>
+      <div class="top-status">
+        <div class="date-block"><span id="ageText">14岁</span><b id="monthText">第1月</b></div>
+        <div class="ap-block"><span>执行点</span><b id="apText">3 / 3</b></div>
+        <button id="saveBtn" class="icon-button" title="保存进度" aria-label="保存进度">⌁</button>
+        <button id="restartBtn" class="icon-button" title="重新开始" aria-label="重新开始">↻</button>
+      </div>
+    </header>
+
+    <main class="dashboard">
+      <aside class="profile-column">
+        <article class="player-card">
+          <img src="assets/player.webp" alt="玩家选手立绘">
+          <div class="player-gradient"></div>
+          <div class="player-card-copy">
+            <div class="player-number"><span id="posBadge">MID</span><b id="overallText">58</b></div>
+            <h2 id="playerNameText">Zephyr</h2>
+            <p id="clubText">CQG 青训队</p>
+            <div id="talentMini" class="talent-mini"></div>
+          </div>
+        </article>
+
+        <section class="side-panel glass">
+          <div class="section-title"><h3>能力雷达</h3><span id="radarOvr">58</span></div>
+          <div id="radarPanel" class="radar-panel"></div>
+        </section>
+
+        <section class="side-panel glass pulse-panel">
+          <div class="pulse-row money-row"><span>个人资金</span><b id="moneyText">0万</b></div>
+          <div class="pulse-row"><span title="手感、睡眠和手腕状态的综合">精力</span><b id="fitnessText">90</b></div>
+          <div class="mini-track"><i id="fitnessBar"></i></div>
+          <div class="pulse-row"><span>状态</span><b id="formText">60</b></div>
+          <div class="mini-track amber"><i id="formBar"></i></div>
+          <div class="pulse-row"><span title="与陈安安的亲密和信任">安安关系</span><b id="loveText">80</b></div>
+          <div class="mini-track rose"><i id="loveBar"></i></div>
+          <div class="pulse-row"><span title="家里的安稳程度，影响你状态的长期基线">家庭</span><b id="familyText">86</b></div>
+          <div class="mini-track sky"><i id="familyBar"></i></div>
+        </section>
+      </aside>
+
+      <section class="main-column">
+        <nav id="gameNav" class="game-nav" aria-label="游戏功能">
+          <button class="active" data-tab="actions">行动</button>
+          <button data-tab="story">故事</button>
+          <button data-tab="career">生涯</button>
+          <button data-tab="matches">赛程</button>
+          <button data-tab="transfer">转会</button>
+          <button data-tab="assets">资产</button>
+          <button data-tab="national">国际赛</button>
+          <button data-tab="honours">荣誉</button>
+          <button data-tab="rank">排行</button>
+        </nav>
+
+        <div class="now-strip">
+          <div><span class="live-dot"></span><b id="phaseTitle">青训期</b><span id="phaseHint">每月3个执行点，下一次抉择在2个月后</span></div>
+          <div class="next-match" id="nextMatch"></div>
+          <button id="endMonthBtn" class="month-button" type="button">结束本月</button>
+        </div>
+
+        <div id="panel" class="content-panel"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modalMask" class="modal-mask hidden" role="presentation">
+    <section id="modal" class="decision-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div id="modalPortraitWrap" class="modal-portrait hidden"><img id="modalPortrait" alt="剧情人物"></div>
+      <div class="modal-content">
+        <span id="modalKicker" class="eyebrow">关键抉择</span>
+        <h2 id="modalTitle"></h2>
+        <div id="modalBody" class="modal-body"></div>
+        <div id="modalOptions" class="modal-options"></div>
+      </div>
+    </section>
+  </div>
+
+  <section id="ending" class="story-screen hidden" aria-live="polite">
+    <div class="story-art"><img src="assets/father.webp" alt="退役"></div>
+    <div id="endingBody" class="story-copy glass ending-copy"></div>
+  </section>
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
